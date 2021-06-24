@@ -10,11 +10,27 @@ namespace MSTestTest
         [TestMethod]
         public void Repro()
         {
-            var done = new AutoResetEvent(false);
-            done.Dispose();
+            var ok = false;
+            try
+            {            
+                using var done = new AutoResetEvent(false);
+                
+                var thread = new Thread(() => 
+                { 
+                    ok = true; 
+                    done.Set(); 
+                });
 
-            var thread = new Thread(() => done.Set());
-            thread.Start();
+                thread.Start();
+
+                // _ = done.WaitOne(1000);
+            }
+            catch
+            {
+                ok = false;
+            }
+
+            Assert.IsTrue(ok);
         }
     }
 }
