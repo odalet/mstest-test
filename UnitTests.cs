@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -13,17 +14,13 @@ namespace MSTestTest
             var ok = false;
             try
             {            
-                using var done = new AutoResetEvent(false);
-                
                 var thread = new Thread(() => 
                 { 
                     ok = true; 
-                    done.Set(); 
+                    throw new Exception("TEST");
                 });
 
                 thread.Start();
-
-                // _ = done.WaitOne(1000);
             }
             catch
             {
