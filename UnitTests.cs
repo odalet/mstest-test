@@ -1,5 +1,4 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -11,18 +10,11 @@ namespace MSTestTest
         [TestMethod]
         public void Repro()
         {
-            try
-            {
-                var done = new AutoResetEvent(false);
-                done.Dispose();
+            var done = new AutoResetEvent(false);
+            done.Dispose();
 
-                var thread = new Thread(() => done.Set());
-                thread.Start();
-            }
-            catch (Exception ex)
-            {
-                Assert.Fail($"Test failed: {ex}");
-            }
+            var thread = new Thread(() => done.Set());
+            thread.Start();
         }
     }
 }
