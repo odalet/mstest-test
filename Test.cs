@@ -37,5 +37,33 @@ namespace MSTestTest
                 Assert.Fail($"Connection creation error: {ex}");
             }
         }
+
+        [TestMethod, ExpectedException(typeof(BrokerUnreachableException))]
+        public void RabbitClient_cannot_connect_when_passed_invalid_host_and_credentials_2()
+        {
+            var factory = new ConnectionFactory
+            {
+                HostName = "IDONTEXIST",
+                UserName = "jdoe",
+                Password = "p@ssw0rd",
+                Port = 5672,
+                AutomaticRecoveryEnabled = true,
+                TopologyRecoveryEnabled = true
+            };
+
+            try
+            {
+                _ = factory.CreateConnection("ncore");
+                Assert.Fail("Connection should be impossible");
+            }
+            catch (BrokerUnreachableException)
+            {                
+                throw; // That's what we expect
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail($"Connection creation error: {ex}");
+            }
+        }
     }
 }
